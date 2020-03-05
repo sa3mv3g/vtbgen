@@ -1,6 +1,7 @@
 var DigitalWaveFormManager = {
     DigitalWaveforms: {},
-    AddNewWaveForm: function (signal_name, length) {
+    length:1,
+    AddNewWaveForm: function (signal_name) {
         k = Object.keys(this.DigitalWaveforms);
         // return if signal with same name already exists
         for (let i = 0; i < k.length; i++) if (k[i] === signal_name) return 0;
@@ -36,5 +37,5 @@ var DigitalWaveFormManager = {
             str += this.DigitalWaveforms[k[i]].generateThisWaveCode()
         }
         return str;
-    }
+    },
 }
