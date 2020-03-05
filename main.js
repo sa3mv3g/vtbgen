@@ -1,6 +1,6 @@
 var DigitalWaveFormManager = {
     DigitalWaveforms: {},
-    length:1,
+    length: 1,
     AddNewWaveForm: function (signal_name) {
         k = Object.keys(this.DigitalWaveforms);
         // return if signal with same name already exists
@@ -25,7 +25,7 @@ var DigitalWaveFormManager = {
         tr.appendChild(td3);
         document.getElementById('DigitalWaves').children[0].appendChild(tr);
 
-        let w = new DigitalWave(signal_name, length);
+        let w = new DigitalWave(signal_name, this.length);
         w.SetUp();
         DigitalWaveFormManager.DigitalWaveforms[signal_name] = w;
         return 1;
@@ -33,9 +33,23 @@ var DigitalWaveFormManager = {
     GenerateCodeForAllWaveforms: function () {
         let str = "";
         k = Object.keys(this.DigitalWaveforms);
-        for (let i = 0; i < k.length; i++){
+        for (let i = 0; i < k.length; i++) {
             str += this.DigitalWaveforms[k[i]].generateThisWaveCode()
         }
+        return str;
+    },
+    GenerateCodeForAllWaveforms2: function () {
+        let str = "initial begin\n";
+        k = Object.keys(this.DigitalWaveforms);
+        for (let i = 0; i < this.length; i++) {
+            str += "\t#"+i+" ";
+            for (let j = 0; j < k.length; j++) {
+                let dw = this.DigitalWaveforms[k[j]];
+                str += " "+dw.signal_name + " = " + dw.waveState[i] + ";";
+            }
+            str += "\n";
+        }
+        str += 'end'
         return str;
     },
 }

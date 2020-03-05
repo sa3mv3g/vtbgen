@@ -3,22 +3,22 @@
     <script src="main.js"></script>
     <script type="text/javascript">
         function run() {
-            window.a = new DigitalWave('w1', 20);
-            a.SetUp();
-            window.b =  new DigitalWave('w2', 10);
-            b.SetUp();
+            DigitalWaveFormManager.length = 104;
+            for (let u = 0; u < 22; u++) {
+                DigitalWaveFormManager.AddNewWaveForm('w' + u);
+            }
+            // DigitalWaveFormManager.AddNewWaveForm('w1');
+            // DigitalWaveFormManager.AddNewWaveForm('w2');
+            //console.log(DigitalWaveFormManager.GenerateCodeForAllWaveforms2());
         }
     </script>
 </head>
 
 <body>
-    <!-- <button onclick="run()">click me</button> <br/><br/>
-    <canvas id="w1"></canvas>
-    <canvas id="w2"></canvas> -->
-    <table id="DigitalWaves" border = "1" style="border-collapse: collapse; font-family: Arial, Helvetica, sans-serif;">
+    <table id="DigitalWaves" border="1" style="border-collapse: collapse; font-family: Arial, Helvetica, sans-serif;">
         <tr>
             <th>Signal Name</th>
             <th>Digital Waveform</th>
         </tr>
-    </tabel>
+        </tabel>
 </body>

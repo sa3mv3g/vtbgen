@@ -2,7 +2,7 @@ class DigitalWave {
 	canvas;
 	signal_name;
 	sim_length = 0;
-	time_period_width_in_canvas = 100;
+	time_period_width_in_canvas = 50;
 	canvas_height = 100;
 	waveState = [];
 	constructor(id, simlen) {
@@ -55,7 +55,7 @@ class DigitalWave {
 		var res = "";
 		res += "initial begin \n"
 		for (let i = 0; i < this.sim_length; i++) {
-			res += "\t#" + i + " " + this.signal_name + " = " + this.waveState[i] + "\n";
+			res += "\t#" + i + " " + this.signal_name + " = " + this.waveState[i] + ";\n";
 		}
 		res += "end\n";
 		return res;
