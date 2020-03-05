@@ -29,6 +29,9 @@ class DigitalWave {
 			ctx.lineTo(this.time_period_width_in_canvas * (i), this.waveState[i - 1] == 1 ? 10 : this.canvas_height - 10);
 			ctx.closePath();
 			ctx.stroke();
+
+			ctx.strokeStyle = 'black';
+			ctx.strokeText('' + parseInt(i - 1), this.time_period_width_in_canvas * (i - 1), this.canvas_height + 2);
 		}
 	}
 	onCanvasClick(event, clss) {
@@ -43,7 +46,7 @@ class DigitalWave {
 	}
 	SetUp() {
 		this.canvas.setAttribute('width', "" + (this.sim_length * this.time_period_width_in_canvas));
-		this.canvas.setAttribute('height', '' + this.canvas_height);
+		this.canvas.setAttribute('height', '' + parseInt(this.canvas_height + 10));
 		this.canvas.setAttribute("style", "border: 2px solid black");
 		var ctx = this.canvas.getContext('2d');
 		this.drawOnCanvas();
@@ -52,7 +55,7 @@ class DigitalWave {
 		var res = "";
 		res += "initial begin \n"
 		for (let i = 0; i < this.sim_length; i++) {
-			res += "\t#" + (i + 1) + " " + this.signal_name + " = " + this.waveState[i] + "\n";
+			res += "\t#" + i + " " + this.signal_name + " = " + this.waveState[i] + "\n";
 		}
 		res += "end\n";
 		return res;
