@@ -1,0 +1,17 @@
+<head>
+    <script src="main.js"></script>
+    <script type="text/javascript">
+        function run() {
+            window.a = new DigitalWave('w1', 20);
+            a.SetUp();
+            window.b =  new DigitalWave('w2', 10);
+            b.SetUp();
+        }
+    </script>
+</head>
+
+<body>
+    <button onclick="run()">click me</button> <br/><br/>
+    <canvas id="w1"></canvas>
+    <canvas id="w2"></canvas>
+</body>
