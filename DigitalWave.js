@@ -20,7 +20,7 @@ class DigitalWave {
 	time_period_width_in_canvas = 20;
 	canvas_height = 100;
 	waveState = [];
-	marking_interval = 10;
+	time_marking_interval = 10;
 	doMarkSignalLevels = true;
 	doMarkTime = true;
 
@@ -73,7 +73,7 @@ class DigitalWave {
 
 			//draw markings 
 			ctx.strokeStyle = 'black';
-			if (this.doMarkTime && i % this.marking_interval === 0) {
+			if (this.doMarkTime && i % this.time_marking_interval === 0) {
 				ctx.strokeText('' + parseInt(i - 1), this.time_period_width_in_canvas * (i - 1), this.canvas_height + 2);
 			}
 			if (this.doMarkSignalLevels) {
