@@ -45,7 +45,7 @@ var DigitalWaveFormManager = {
             str += "\t#"+i+" ";
             for (let j = 0; j < k.length; j++) {
                 let dw = this.DigitalWaveforms[k[j]];
-                str += " "+dw.signal_name + " = " + dw.waveState[i] + ";";
+                str += " "+dw.signal_name + " = " + GetSignalLevel_string_repr(dw.waveState[i]) + ";";
             }
             str += "\n";
         }
