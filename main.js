@@ -20,6 +20,7 @@ var DigitalWaveFormManager = {
         let cn = document.createElement('canvas');
         cn.setAttribute('id', signal_name);
         td3.appendChild(cn);
+        td3.style.padding = '5px';
         td1.appendChild(document.createTextNode(signal_name));
         tr.appendChild(td1);
         tr.appendChild(td3);

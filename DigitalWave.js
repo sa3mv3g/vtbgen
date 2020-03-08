@@ -116,8 +116,8 @@ class DigitalWave {
 			for (let i = clss.selectRange[0]; i <= clss.selectRange[1]; i++) {
 				clss.waveState[i] = SignalLevelArray[sigl];
 			}
-			clss.drawOnCanvas();
 		}
+		clss.drawOnCanvas();
 	}
 
 	onCanvasClick(event, clss) {
