@@ -24,23 +24,41 @@ class DigitalWave {
 	doMarkSignalLevels = true;
 	doMarkTime = true;
 
+	selectRange = [];
+	selectRange_index = 0;
+
 	constructor(id, simlen) {
 		this.signal_name = id;
 		this.canvas = document.getElementById(id);
 		this.sim_length = simlen;
-		this.canvas.addEventListener('click', (e) => { this.onCanvasClick(e, this) });
-		for (let i = 0; i < simlen; i++) this.waveState[i] = X;
+		this.canvas.addEventListener('click', (e) => {
+			if (e.ctrlKey) {
+				this.onCanvasCtrlClick(e, this);
+			} else {
+				this.onCanvasClick(e, this);
+			}
+		});
+		for (let i = 0; i < simlen; i++) this.waveState[i] = LOW;
 	}
 
 	drawOnCanvas() {
 		var ctx = this.canvas.getContext('2d');
+		let marginY = 15;
+		let paddingY = 5;
 		ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		for (let i = 1; i <= this.sim_length; i++) {
+			//highlight the selected area
+			let a = this.selectRange.sort(function (a, b) { return a - b });
+			if ((i - 1) >= a[0] && (i - 1) <= a[1]) {
+				ctx.fillStyle = '#007fff ';
+				ctx.fillRect(this.time_period_width_in_canvas * (i - 1), 0, this.time_period_width_in_canvas, this.canvas_height + marginY + paddingY);
+			}
+
 			//draw saperator
 			ctx.strokeStyle = "#dddddd";
 			ctx.beginPath();
-			ctx.moveTo(this.time_period_width_in_canvas * i, 10);
-			ctx.lineTo(this.time_period_width_in_canvas * i, this.canvas_height - 10);
+			ctx.moveTo(this.time_period_width_in_canvas * i, marginY + paddingY);
+			ctx.lineTo(this.time_period_width_in_canvas * i, this.canvas_height - marginY + paddingY);
 			ctx.closePath();
 			ctx.stroke();
 
@@ -49,12 +67,12 @@ class DigitalWave {
 			ctx.beginPath();
 			switch (this.waveState[i - 1]) {
 				case HIGH:
-					ctx.moveTo(this.time_period_width_in_canvas * (i - 1), 10);
-					ctx.lineTo(this.time_period_width_in_canvas * (i), 10);
+					ctx.moveTo(this.time_period_width_in_canvas * (i - 1), marginY + paddingY);
+					ctx.lineTo(this.time_period_width_in_canvas * (i), marginY + paddingY);
 					break;
 				case LOW:
-					ctx.moveTo(this.time_period_width_in_canvas * (i - 1), this.canvas_height - 10);
-					ctx.lineTo(this.time_period_width_in_canvas * (i), this.canvas_height - 10);
+					ctx.moveTo(this.time_period_width_in_canvas * (i - 1), this.canvas_height - marginY + paddingY);
+					ctx.lineTo(this.time_period_width_in_canvas * (i), this.canvas_height - marginY + paddingY);
 					break;
 				case HiZ:
 					ctx.strokeStyle = '#ff8000';
@@ -62,10 +80,10 @@ class DigitalWave {
 					ctx.lineTo(this.time_period_width_in_canvas * (i), this.canvas_height / 2);
 					break;
 				case X:
-					ctx.moveTo(this.time_period_width_in_canvas * (i - 1), this.canvas_height / 2 - 10);
-					ctx.lineTo(this.time_period_width_in_canvas * i, this.canvas_height / 2 - 10);
-					ctx.moveTo(this.time_period_width_in_canvas * (i - 1), this.canvas_height / 2 + 10);
-					ctx.lineTo(this.time_period_width_in_canvas * i, this.canvas_height / 2 + 10);
+					ctx.moveTo(this.time_period_width_in_canvas * (i - 1), this.canvas_height / 2 - marginY + paddingY);
+					ctx.lineTo(this.time_period_width_in_canvas * i, this.canvas_height / 2 - marginY + paddingY);
+					ctx.moveTo(this.time_period_width_in_canvas * (i - 1), this.canvas_height / 2 + marginY + paddingY);
+					ctx.lineTo(this.time_period_width_in_canvas * i, this.canvas_height / 2 + marginY + paddingY);
 					break;
 			}
 			ctx.closePath();
@@ -73,25 +91,48 @@ class DigitalWave {
 
 			//draw markings 
 			ctx.strokeStyle = 'black';
+			ctx.textBaseline = "top";
 			if (this.doMarkTime && i % this.time_marking_interval === 0) {
-				ctx.strokeText('' + parseInt(i - 1), this.time_period_width_in_canvas * (i - 1), this.canvas_height + 2);
+				ctx.strokeText('' + parseInt(i - 1), this.time_period_width_in_canvas * (i - 1), this.canvas_height - 5);
 			}
 			if (this.doMarkSignalLevels) {
-				ctx.textBaseline = "top";
-				ctx.strokeText(GetSignalLevel_string_repr(this.waveState[i - 1]), this.time_period_width_in_canvas / 2 + this.time_period_width_in_canvas * (i - 1), 0);
-				ctx.textBaseline = "bottom";
+				ctx.strokeText(GetSignalLevel_string_repr(this.waveState[i - 1]), this.time_period_width_in_canvas / 2 + this.time_period_width_in_canvas * (i - 1), 5);
 			}
+			ctx.textBaseline = "bottom";
+		}
+	}
+
+	onCanvasCtrlClick(event, clss) {
+		const rect = clss.canvas.getBoundingClientRect();
+		const x = event.clientX - rect.left;
+		const y = event.clientY - rect.top;
+		const tin = parseInt(x / clss.time_period_width_in_canvas);
+		if (clss.selectRange.length < 2) {
+			clss.selectRange[clss.selectRange.length] = tin;
+			if (clss.selectRange.length === 2) clss.drawOnCanvas();
+		} else {
+			let a = clss.selectRange.sort(function (a, b) { return a - b });
+			let sigl = (SignalLevelArray.indexOf(clss.waveState[clss.selectRange[0]]) + 1) % SignalLevelArray.length
+			for (let i = clss.selectRange[0]; i <= clss.selectRange[1]; i++) {
+				clss.waveState[i] = SignalLevelArray[sigl];
+			}
+			clss.drawOnCanvas();
 		}
 	}
 
 	onCanvasClick(event, clss) {
-		const rect = clss.canvas.getBoundingClientRect();
-		const x = event.clientX - rect.left;
-		const y = event.clientY - rect.top;
-		console.log(x, y);
-		const tin = parseInt(x / clss.time_period_width_in_canvas);
-		clss.waveState[tin] = SignalLevelArray[(SignalLevelArray.indexOf(clss.waveState[tin]) + 1) % SignalLevelArray.length];
-		console.log(clss.waveState);
+		if (this.selectRange.length !== 0) {
+			this.selectRange = [];
+		} else {
+			const rect = clss.canvas.getBoundingClientRect();
+			const x = event.clientX - rect.left;
+			const y = event.clientY - rect.top;
+			//console.log(x, y);
+			const tin = parseInt(x / clss.time_period_width_in_canvas);
+			console.log(tin);
+			clss.waveState[tin] = SignalLevelArray[(SignalLevelArray.indexOf(clss.waveState[tin]) + 1) % SignalLevelArray.length];
+			//console.log(clss.waveState);
+		}
 		clss.drawOnCanvas();
 	}
 
