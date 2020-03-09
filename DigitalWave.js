@@ -13,6 +13,12 @@ function GetSignalLevel_string_repr(sig) {
 	}
 }
 
+var is_array = function (input) {
+    if (toString.call(input) === "[object Array]")
+        return true;
+    return false;
+};
+
 class DigitalWave {
 	canvas;
 	signal_name;
@@ -172,15 +178,17 @@ class DigitalWave {
 		return res;
 	}
 
-	// BuildWaveform(f) {
-	// 	a = f(this.sim_length);
-	// 	if (a.length === this.sim_length) this.waveState = a;
-	// 	else {
-	// 		let g = a.length > this.sim_length ? this.sim_length : a.length;
-	// 		for (let i = 0; i < g; i++) {
-	// 			this.waveState[i] = a[i];
-	// 		}
-	// 	}
-	// 	this.drawOnCanvas();
-	// }
+	BuildWaveform(f) {
+		if(typeof(f) !== "function" ) return;
+		a = f(this.sim_length);
+		if(!is_array(a)) return;
+		if (a.length === this.sim_length) this.waveState = a;
+		else {
+			let g = a.length > this.sim_length ? this.sim_length : a.length;
+			for (let i = 0; i < g; i++) {
+				this.waveState[i] = a[i];
+			}
+		}
+		this.drawOnCanvas();
+	}
 }

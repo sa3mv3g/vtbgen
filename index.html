@@ -59,13 +59,16 @@
 
 <body>
     <div id="optionsMenuContiner">
-        <a href="#" class="optionsMenu" onclick="newSignal()">New Signal</a>
-        <a href="#" class="optionsMenu" onclick="deleteSignal()">Delete Signal</a>
-        <a href="#" class="optionsMenu" onclick="renameSignal()">Rename Signal</a>
-        <a href="#" class="optionsMenu" onclick="ChangeSimulationTime()">Change Simulation Time</a>
-        <a href="#" class="optionsMenu" onclick="ToogleTimeMarkings()">Turn On/Off time markings</a>
-        <a href="#" class="optionsMenu" onclick="ToggleSignalLevelMarkings()">Turn On/Off signal level markings</a>
-        <a href="#" class="optionsMenu" onclick="changeMarkingIntervals()">Change Marking Interval</a>
+        <button class="optionsMenu" onclick="newSignal()">New Signal</button>
+        <button class="optionsMenu" onclick="deleteSignal()">Delete Signal</button>
+        <button class="optionsMenu" onclick="renameSignal()">Rename Signal</button>
+        <button class="optionsMenu" onclick="ChangeSimulationTime()">Change Simulation Time</button>
+        <button class="optionsMenu" onclick="ToogleTimeMarkings()">Turn On/Off time markings</button>
+        <button class="optionsMenu" onclick="ToggleSignalLevelMarkings()">Turn On/Off signal level markings</button>
+        <button class="optionsMenu" onclick="changeMarkingIntervals()">Change Marking Interval</button>
+        <!-- <br />
+        <hr/>
+        <button class="optionsMenu">Add Clock Signal</button> -->
     </div>
     <table id="DigitalWaves" border="1">
         <tr>
@@ -73,5 +76,5 @@
             <th><input type="checkbox" onclick="ChangeAllCheckBox(this)" /></th>
             <th>Digital Waveform</th>
         </tr>
-        </tabel>
+    </tabel>
 </body>

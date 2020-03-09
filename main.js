@@ -1,8 +1,3 @@
-var is_array = function (input) {
-    if (toString.call(input) === "[object Array]")
-        return true;
-    return false;
-};
 
 var DigitalWaveFormManager = {
     DigitalWaveforms: {},
@@ -112,9 +107,6 @@ function getSelectedCanvas() {
 }
 
 function newSignal(name = null) {
-    var doc = document.documentElement;
-    var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-    var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
     let sn = '';
     if (!name) {
         do { sn = prompt("Signal Name (Unique)"); }
@@ -122,9 +114,6 @@ function newSignal(name = null) {
     } else {
         DigitalWaveFormManager.AddNewWaveForm(name);
     }
-    setTimeout(() => {
-        scrollTo(left, top);
-    }, 2);
 }
 
 function _deleteSignal(id) {
@@ -135,23 +124,14 @@ function _deleteSignal(id) {
 }
 
 function deleteSignal() {
-    var doc = document.documentElement;
-    var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-    var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
     var s = getSelectedCanvas();
     for (let i = 0; i < s.length; i++) {
         console.log(s[i]);
         DigitalWaveFormManager.deleteSignal(s[i].id);
     }
-    setTimeout(() => {
-        scrollTo(left, top);
-    }, 2);
 }
 
 function renameSignal() {
-    var doc = document.documentElement;
-    var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-    var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
     let canvas = getSelectedCanvas();
     for (let i = 0; i < canvas.length; i++) {
         can = canvas[i];
@@ -161,58 +141,33 @@ function renameSignal() {
         DigitalWaveFormManager.deleteSignal(can.id);
         DigitalWaveFormManager.AddNewWaveForm(name, prev_wave_form);
     }
-    setTimeout(() => {
-        scrollTo(left, top);
-    }, 2);
 }
 
 function ChangeSimulationTime() {
-    var doc = document.documentElement;
-    var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-    var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
     let nl = prompt("Simulation Time: ", DigitalWaveFormManager.length);
     if (nl)
         DigitalWaveFormManager.changeSimulationTime(nl);
-    setTimeout(() => {
-        scrollTo(left, top);
-    }, 2);
 }
 
 function ToogleTimeMarkings() {
-    var doc = document.documentElement;
-    var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-    var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
     let cans = getSelectedCanvas();
     for (let i = 0; i < cans.length; i++) {
         let obj = DigitalWaveFormManager.DigitalWaveforms[cans[i].id];
         obj.doMarkTime = !obj.doMarkTime;
         obj.drawOnCanvas();
     }
-    setTimeout(() => {
-        scrollTo(left, top);
-    }, 2);
 }
 
 function ToggleSignalLevelMarkings() {
-    var doc = document.documentElement;
-    var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-    var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
-
     let cans = getSelectedCanvas();
     for (let i = 0; i < cans.length; i++) {
         let obj = DigitalWaveFormManager.DigitalWaveforms[cans[i].id];
         obj.doMarkSignalLevels = !obj.doMarkSignalLevels;
         obj.drawOnCanvas();
     }
-    setTimeout(() => {
-        scrollTo(left, top);
-    }, 2);
 }
 
 function changeMarkingIntervals() {
-    var doc = document.documentElement;
-    var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-    var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
     let int = parseInt(prompt("New Marking Interval: (number)"));
     let cans = getSelectedCanvas();
     for (let i = 0; i < cans.length; i++) {
@@ -220,7 +175,4 @@ function changeMarkingIntervals() {
         obj.time_marking_interval = int;
         obj.drawOnCanvas();
     }
-    setTimeout(() => {
-        scrollTo(left, top);
-    }, 2);
 }
