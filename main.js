@@ -176,3 +176,63 @@ function changeMarkingIntervals() {
         obj.drawOnCanvas();
     }
 }
+
+
+function ConvertToClockSignal() {
+    let tp = parseInt(prompt("Half Time Period: "));
+    if (!tp) {
+        alert("Got invalid Input");
+        return;
+    }
+    a = [];
+    let vv = HIGH;
+    for (let i = 0; i < DigitalWaveFormManager.length; i++) {
+        let ss = i % tp;
+        if (!ss) vv = vv == LOW ? HIGH : LOW;
+        a.push(vv);
+    }
+    getSelectedCanvas().forEach((item, id) => {
+        DigitalWaveFormManager.DigitalWaveforms[item.id].copyWaveform(a);
+        DigitalWaveFormManager.DigitalWaveforms[item.id].drawOnCanvas();
+    });
+}
+
+function InvertWaveForm() {
+    getSelectedCanvas().forEach((item, id) => {
+        let ww = DigitalWaveFormManager.DigitalWaveforms[item.id];
+        let wf = ww.waveState;
+        wf.forEach((element, index) => {
+            if (element === HIGH) wf[index] = LOW;
+            if (element === LOW) wf[index] = HIGH;
+        });
+        ww.copyWaveform(wf);
+        ww.drawOnCanvas();
+    });
+}
+
+function ShiftWaveRight() {
+    getSelectedCanvas().forEach(item => {
+        let ww = DigitalWaveFormManager.DigitalWaveforms[item.id];
+        let wf = ww.waveState;
+        for (let i = 1; i < wf.length; i++) {
+            wf[i - 1] = wf[i];
+        }
+        ww.copyWaveform(wf);
+        ww.drawOnCanvas();
+    });
+}
+
+function ShiftWaveLeft() {
+    getSelectedCanvas().forEach(item => {
+        let ww = DigitalWaveFormManager.DigitalWaveforms[item.id];
+        let wf = ww.waveState;
+        let vv =  wf[0];
+        for (let i = 0; i < wf.length - 1; i++) {
+            let gg = wf[i + 1];
+            wf[i + 1] = vv;
+            vv = gg;
+        }
+        ww.copyWaveform(wf);
+        ww.drawOnCanvas();
+    });
+}
