@@ -210,19 +210,20 @@ function InvertWaveForm() {
     });
 }
 
-function ShiftWaveRight() {
+function ShiftWaveLeft() {
     getSelectedCanvas().forEach(item => {
         let ww = DigitalWaveFormManager.DigitalWaveforms[item.id];
         let wf = ww.waveState;
         for (let i = 1; i < wf.length; i++) {
             wf[i - 1] = wf[i];
         }
+        wf[wf.length - 1] = LOW;
         ww.copyWaveform(wf);
         ww.drawOnCanvas();
     });
 }
 
-function ShiftWaveLeft() {
+function ArthematicShiftWaveRight() {
     getSelectedCanvas().forEach(item => {
         let ww = DigitalWaveFormManager.DigitalWaveforms[item.id];
         let wf = ww.waveState;
