@@ -237,3 +237,9 @@ function ArthematicShiftWaveRight() {
         ww.drawOnCanvas();
     });
 }
+
+function generateCode(){
+    var s = DigitalWaveFormManager.GenerateCodeForAllWaveforms2();
+    let win = window.open("", "Verilog Code","_blank");
+    win.document.body.innerText = (s);
+}
