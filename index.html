@@ -7,9 +7,9 @@
             run();
         };
         function run() {
-            DigitalWaveFormManager.length = 104;
-            for (let u = 0; u < 22; u++) {
-                DigitalWaveFormManager.AddNewWaveForm('w' + u);
+            DigitalWaveFormManager.length = 100;
+            for (let u = 0; u < 1; u++) {
+                DigitalWaveFormManager.AddNewWaveForm('Signal' + u);
             }
             // DigitalWaveFormManager.AddNewWaveForm('w1');
             // DigitalWaveFormManager.AddNewWaveForm('w2');
@@ -43,12 +43,12 @@
             text-align: center;
             height: 100px;
             position: fixed;
-            border-bottom: 10px solid #ccc;
+            border-bottom: 2px solid #ccc;
             background-color: whitesmoke;
             top: 0px;
             left: 0px;
             z-index: 1;
-            box-shadow: 0px 0px 25px 18px #ccc;
+            box-shadow: 0px 0px 10px 6px #ccc;
         }
         #DigitalWaves{
             top: 105px; 
