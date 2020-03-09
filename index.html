@@ -2,25 +2,75 @@
     <script src="DigitalWave.js"></script>
     <script src="main.js"></script>
     <script type="text/javascript">
-        window.onload = run;
+        window.onload = () => {
+            document.getElementById("optionsMenuContiner").style.width = parseInt(screen.width - 2) + 'px';
+            run();
+        };
         function run() {
             DigitalWaveFormManager.length = 104;
-            // for (let u = 0; u < 22; u++) {
-            //     DigitalWaveFormManager.AddNewWaveForm('w' + u);
-            // }
-            DigitalWaveFormManager.AddNewWaveForm('w1');
-            DigitalWaveFormManager.AddNewWaveForm('w2');
-            console.log(DigitalWaveFormManager.GenerateCodeForAllWaveforms2());
+            for (let u = 0; u < 22; u++) {
+                DigitalWaveFormManager.AddNewWaveForm('w' + u);
+            }
+            // DigitalWaveFormManager.AddNewWaveForm('w1');
+            // DigitalWaveFormManager.AddNewWaveForm('w2');
+            //console.log(DigitalWaveFormManager.GenerateCodeForAllWaveforms2());
         }
     </script>
     <style>
+        tr:hover {
+            background-color: cornsilk;
+        }
+
+        .optionsMenu {
+            display: inline-block;
+            text-decoration: none;
+            padding: 5px;
+            border: 2px solid black;
+            margin: 5px;
+            font-family: arial;
+            color: black;
+            background-color: crimson;
+        }
+
+        .optionsMenu:hover {
+            color: white;
+        }
+
+        #optionsMenuContiner {
+            display: block;
+            text-align: center;
+            height: 100px;
+            position: fixed;
+            border: 2px solid black;
+            background-color: #cccccc;
+            top: 0px;
+            left: 0px;
+            z-index: 1;
+        }
+        #DigitalWaves{
+            top: 105px; 
+            border-collapse: collapse; 
+            font-family: Arial, Helvetica, sans-serif;
+            position: relative;
+            z-index: 0;
+        }
     </style>
 </head>
 
 <body>
-    <table id="DigitalWaves" border="1" style="border-collapse: collapse; font-family: Arial, Helvetica, sans-serif;">
+    <div id="optionsMenuContiner">
+        <a href="#" class="optionsMenu" onclick="newSignal()">New Signal</a>
+        <a href="#" class="optionsMenu" onclick="deleteSignal()">Delete Signal</a>
+        <a href="#" class="optionsMenu" onclick="renameSignal()">Rename Signal</a>
+        <a href="#" class="optionsMenu" onclick="ChangeSimulationTime()">Change Simulation Time</a>
+        <a href="#" class="optionsMenu" onclick="ToogleTimeMarkings()">Turn On/Off time markings</a>
+        <a href="#" class="optionsMenu" onclick="ToggleSignalLevelMarkings()">Turn On/Off signal level markings</a>
+        <a href="#" class="optionsMenu" onclick="changeMarkingIntervals()">Change Marking Interval</a>
+    </div>
+    <table id="DigitalWaves" border="1">
         <tr>
             <th>Signal Name</th>
+            <th><input type="checkbox" onclick="ChangeAllCheckBox(this)" /></th>
             <th>Digital Waveform</th>
         </tr>
         </tabel>

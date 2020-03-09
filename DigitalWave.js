@@ -25,7 +25,6 @@ class DigitalWave {
 	doMarkTime = true;
 
 	selectRange = [];
-	selectRange_index = 0;
 
 	constructor(id, simlen) {
 		this.signal_name = id;
@@ -39,6 +38,13 @@ class DigitalWave {
 			}
 		});
 		for (let i = 0; i < simlen; i++) this.waveState[i] = LOW;
+	}
+
+	copyWaveform(arr){
+		let d = this.sim_length > arr.length ? arr.length : this.sim_length;
+		for(let i = 0; i < d; i++){
+			this.waveState[i] = arr[i];
+		}
 	}
 
 	highlightOneSelection(e, clss) {
