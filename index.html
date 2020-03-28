@@ -27,58 +27,114 @@
             display: inline-block;
             text-decoration: none;
             padding: 5px;
-            border: 2px solid crimson;
-            margin: 5px;
+            border: 2px solid #850821;
             font-family: arial;
             color: white;
-            background-color: crimson;
+            background-color: #850821;
             cursor: pointer;
-            border-radius: 5px;
+            width: 100%;
         }
 
         .optionsMenu:hover {
-            background-color: darkred;
+            background-color: crimson;
         }
 
         #optionsMenuContiner {
             display: block;
-            text-align: center;
-            height: 100px;
             position: fixed;
             border-bottom: 2px solid #ccc;
-            background-color: whitesmoke;
+            background-color: black;
             top: 0px;
             left: 0px;
             z-index: 1;
             box-shadow: 0px 0px 10px 6px #ccc;
         }
-        #DigitalWaves{
-            top: 105px; 
-            border-collapse: collapse; 
+
+        #DigitalWaves {
+            top: 105px;
+            border-collapse: collapse;
             font-family: Arial, Helvetica, sans-serif;
             position: relative;
             z-index: 0;
+        }
+
+        .dropbtn {
+            background-color: crimson;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #850821;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #850821;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+            background-color: #850821;
         }
     </style>
 </head>
 
 <body>
     <div id="optionsMenuContiner">
-        <button class="optionsMenu" onclick="newSignal()">New Signal</button>
-        <button class="optionsMenu" onclick="deleteSignal()">Delete Signal</button>
-        <button class="optionsMenu" onclick="renameSignal()">Rename Signal</button>
-        <button class="optionsMenu" onclick="refresh()">Refresh</button>
-        <button class="optionsMenu" onclick="ChangeSimulationTime()">Change Simulation Time</button>
-        <button class="optionsMenu" onclick="ToogleTimeMarkings()">Turn On/Off time markings</button>
-        <button class="optionsMenu" onclick="ToggleSignalLevelMarkings()">Turn On/Off signal level markings</button>
-        <button class="optionsMenu" onclick="changeMarkingIntervals()">Change Marking Interval</button>
-        <button class="optionsMenu" onclick="generateCode()">Generate Verilog Code</button>
-        <br />
-        <hr/>
-        <button class="optionsMenu" onclick="ConvertToClockSignal()">Convert to Clock Signal</button>
-        <button class="optionsMenu" onclick="InvertWaveForm()">Invert Waveform</button>
-        <button class="optionsMenu" onclick="ArthematicShiftWaveRight()">Arthematic Shift Right</button>
-        <button class="optionsMenu" onclick="ShiftWaveLeft()">Shift Left</button>
+        <div class="dropdown">
+            <button class="dropbtn"> File </button>
+            <div class="dropdown-content">
+                <button class="optionsMenu" onclick="newSignal()">New Signal</button>
+                <button class="optionsMenu" onclick="deleteSignal()">Delete Signal</button>
+                <button class="optionsMenu" onclick="renameSignal()">Rename Signal</button>
+                <button class="optionsMenu" onclick="refresh()">Refresh</button>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn"> Edit </button>
+            <div class="dropdown-content">
+                <button class="optionsMenu" onclick="Save()">Save</button>
+                <button class="optionsMenu" onclick="Undo()">Undo</button>
+                <button class="optionsMenu" onclick="Redo()">Redo</button>
+                <button class="optionsMenu" onclick="ConvertToClockSignal()">Convert to Clock Signal</button>
+                <button class="optionsMenu" onclick="InvertWaveForm()">Invert Waveform</button>
+                <button class="optionsMenu" onclick="ArthematicShiftWaveRight()">Arthematic Shift Right</button>
+                <button class="optionsMenu" onclick="ShiftWaveLeft()">Shift Left</button>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn"> Options </button>
+            <div class="dropdown-content">
+                <button class="optionsMenu" onclick="ChangeSimulationTime()">Change Simulation Time</button>
+                <button class="optionsMenu" onclick="ToogleTimeMarkings()">Turn On/Off time markings</button>
+                <button class="optionsMenu" onclick="ToggleSignalLevelMarkings()">Turn On/Off signal level
+                    markings</button>
+                <button class="optionsMenu" onclick="changeMarkingIntervals()">Change Marking Interval</button>
+                <button class="optionsMenu" onclick="generateCode()">Generate Verilog Code</button>
+            </div>
+        </div>
     </div>
     <table id="DigitalWaves" border="1">
         <tr>
@@ -86,5 +142,5 @@
             <th><input type="checkbox" onclick="ChangeAllCheckBox(this)" /></th>
             <th>Digital Waveform</th>
         </tr>
-    </tabel>
+        </tabel>
 </body>

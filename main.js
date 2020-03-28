@@ -287,3 +287,15 @@ function generateCode() {
 function refresh() {
     DigitalWaveFormManager.refreshDocument();
 }
+
+function Save(){
+    DigitalWaveFormManager.save();
+}
+
+function Redo(){
+    DigitalWaveFormManager.redo();
+}
+
+function Undo(){
+    DigitalWaveFormManager.undo();
+}
