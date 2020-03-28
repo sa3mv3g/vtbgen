@@ -69,18 +69,31 @@ var DigitalWaveFormManager = {
         str += 'end'
         return str;
     },
-    deleteSignal(id) {
+    deleteSignal : function(id) {
         delete this.DigitalWaveforms[id];
         let a = document.getElementById(id).parentNode.parentNode;
         console.log(a);
         a.parentNode.removeChild(a);
     },
-    changeSimulationTime(newLen) {
+    changeSimulationTime: function(newLen) {
         let kys = Object.keys(this.DigitalWaveforms);
         this.length = newLen;
         for (let i = 0; i < kys.length; i++) {
             this.DigitalWaveforms[kys[i]].sim_length = newLen;
             this.DigitalWaveforms[kys[i]].SetUp();
+        }
+    },
+    SaveToFile: function(){
+        
+    },
+    refreshDocument: function(){
+        let kys = Object.keys(this.DigitalWaveforms);
+        let waveforms = this.DigitalWaveforms;
+        for(let i=0;i<kys.length;i++){
+            let id = waveforms[kys[i]].signal_name;
+            let vals = waveforms[kys[i]].waveState;
+            this.deleteSignal(id);
+            this.AddNewWaveForm(id, vals);
         }
     }
 }
@@ -242,4 +255,8 @@ function generateCode(){
     var s = DigitalWaveFormManager.GenerateCodeForAllWaveforms2();
     let win = window.open("", "Verilog Code","_blank");
     win.document.body.innerText = (s);
+}
+
+function refresh(){
+    DigitalWaveFormManager.refreshDocument();
 }
