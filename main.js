@@ -1,3 +1,22 @@
+var objTracker = {
+    pointer_index: 0,
+    save: function (obj) {
+        let str = JSON.stringify(obj);
+        sessionStorage.setItem(this.pointer_index, str);
+        this.pointer_index++;
+    },
+    undo: function () {
+        if (this.pointer_index - 1 > 0)
+            this.pointer_index -= 1;
+        return JSON.parse(sessionStorage.getItem(this.pointer_index - 1));
+    },
+    redo: function () {
+        if (this.pointer_index < sessionStorage.length)
+            this.pointer_index += 1;
+        return JSON.parse(sessionStorage.getItem(this.pointer_index - 1));
+    }
+}
+
 
 var DigitalWaveFormManager = {
     DigitalWaveforms: {},
@@ -69,13 +88,23 @@ var DigitalWaveFormManager = {
         str += 'end'
         return str;
     },
-    deleteSignal : function(id) {
+    deleteSignal: function (id) {
         delete this.DigitalWaveforms[id];
         let a = document.getElementById(id).parentNode.parentNode;
         console.log(a);
         a.parentNode.removeChild(a);
     },
-    changeSimulationTime: function(newLen) {
+    refreshDocument: function () {
+        let kys = Object.keys(this.DigitalWaveforms);
+        let waveforms = this.DigitalWaveforms;
+        for (let i = 0; i < kys.length; i++) {
+            let id = waveforms[kys[i]].signal_name;
+            let vals = waveforms[kys[i]].waveState;
+            this.deleteSignal(id);
+            this.AddNewWaveForm(id, vals);
+        }
+    },
+    changeSimulationTime: function (newLen) {
         let kys = Object.keys(this.DigitalWaveforms);
         this.length = newLen;
         for (let i = 0; i < kys.length; i++) {
@@ -83,18 +112,16 @@ var DigitalWaveFormManager = {
             this.DigitalWaveforms[kys[i]].SetUp();
         }
     },
-    SaveToFile: function(){
-        
+    Save: function () {
+        objTracker.save(this.DigitalWaveforms);
     },
-    refreshDocument: function(){
-        let kys = Object.keys(this.DigitalWaveforms);
-        let waveforms = this.DigitalWaveforms;
-        for(let i=0;i<kys.length;i++){
-            let id = waveforms[kys[i]].signal_name;
-            let vals = waveforms[kys[i]].waveState;
-            this.deleteSignal(id);
-            this.AddNewWaveForm(id, vals);
-        }
+    undo: function(){
+        this.DigitalWaveforms = objTracker.undo();
+        this.refreshDocument();
+    },
+    redo: function(){
+        this.DigitalWaveforms = objTracker.redo();
+        this.refreshDocument();
     }
 }
 
@@ -240,7 +267,7 @@ function ArthematicShiftWaveRight() {
     getSelectedCanvas().forEach(item => {
         let ww = DigitalWaveFormManager.DigitalWaveforms[item.id];
         let wf = ww.waveState;
-        let vv =  wf[0];
+        let vv = wf[0];
         for (let i = 0; i < wf.length - 1; i++) {
             let gg = wf[i + 1];
             wf[i + 1] = vv;
@@ -251,12 +278,12 @@ function ArthematicShiftWaveRight() {
     });
 }
 
-function generateCode(){
+function generateCode() {
     var s = DigitalWaveFormManager.GenerateCodeForAllWaveforms2();
-    let win = window.open("", "Verilog Code","_blank");
+    let win = window.open("", "Verilog Code", "_blank");
     win.document.body.innerText = (s);
 }
 
-function refresh(){
+function refresh() {
     DigitalWaveFormManager.refreshDocument();
 }

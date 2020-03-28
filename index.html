@@ -3,6 +3,7 @@
     <script src="main.js"></script>
     <script type="text/javascript">
         window.onload = () => {
+            sessionStorage.clear();
             document.getElementById("optionsMenuContiner").style.width = parseInt(screen.width - 2) + 'px';
             run();
         };
@@ -11,6 +12,7 @@
             for (let u = 0; u < 1; u++) {
                 DigitalWaveFormManager.AddNewWaveForm('Signal' + u);
             }
+            DigitalWaveFormManager.Save();
             // DigitalWaveFormManager.AddNewWaveForm('w1');
             // DigitalWaveFormManager.AddNewWaveForm('w2');
             //console.log(DigitalWaveFormManager.GenerateCodeForAllWaveforms2());
