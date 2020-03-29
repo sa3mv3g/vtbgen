@@ -49,7 +49,6 @@ var DigitalWaveFormManager = {
                 e.target.parentNode.parentNode.classList.remove("waveSelected");
             }
         });
-        //chk_inp.appendChild(document.createTextNode("Config"));
 
         td2.appendChild(chk_inp);
         cn.setAttribute('id', signal_name);
@@ -102,6 +101,21 @@ var DigitalWaveFormManager = {
             let vals = waveforms[kys[i]].waveState;
             this.deleteSignal(id);
             this.AddNewWaveForm(id, vals);
+        }
+    },
+    quickRefresh: function(){
+        let kys = Object.keys(this.DigitalWaveforms);
+        let waveforms = this.DigitalWaveforms;
+        for(let i=0;i<kys.length;i++){
+            waveforms[kys[i]].drawOnCanvas();
+        }
+    },
+    changeRatio:function(r){
+        let kys = Object.keys(this.DigitalWaveforms);
+        let waveforms = this.DigitalWaveforms;
+        for(let i=0;i<kys.length;i++){
+            waveforms[kys[i]].pixel_ratio = r;
+            waveforms[kys[i]].drawOnCanvas();
         }
     },
     changeSimulationTime: function (newLen) {
