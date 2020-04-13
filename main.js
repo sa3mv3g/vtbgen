@@ -21,6 +21,7 @@ var objTracker = {
 var DigitalWaveFormManager = {
     DigitalWaveforms: {},
     length: 1,
+    global_TimeScale: 1,
     AddNewWaveForm: function (signal_name, vals = null) {
         k = Object.keys(this.DigitalWaveforms);
         // return if signal with same name already exists
@@ -63,9 +64,11 @@ var DigitalWaveFormManager = {
         let w = new DigitalWave(signal_name, this.length);
         if (vals && is_array(vals)) w.copyWaveform(vals);
         w.SetUp();
+        w.TimeScale = this.global_TimeScale;
         DigitalWaveFormManager.DigitalWaveforms[signal_name] = w;
         return 1;
     },
+    // depereciated DO NOT use this function
     GenerateCodeForAllWaveforms: function () {
         let str = "";
         k = Object.keys(this.DigitalWaveforms);
@@ -74,11 +77,12 @@ var DigitalWaveFormManager = {
         }
         return str;
     },
+    // depereciated DO NOT use this function
     GenerateCodeForAllWaveforms2: function () {
         let str = "initial begin\n";
         k = Object.keys(this.DigitalWaveforms);
         for (let i = 0; i < this.length; i++) {
-            str += "\t#1 ";
+            str += "\t#"+this.global_TimeScale+" ";
             for (let j = 0; j < k.length; j++) {
                 let dw = this.DigitalWaveforms[k[j]];
                 str += " " + dw.signal_name + " = " + GetSignalLevel_string_repr(dw.waveState[i]) + ";";
@@ -87,6 +91,9 @@ var DigitalWaveFormManager = {
         }
         str += 'end'
         return str;
+    },
+    GenerateCodeForAllWaveforms3:function(){
+
     },
     deleteSignal: function (id) {
         delete this.DigitalWaveforms[id];
@@ -117,6 +124,7 @@ var DigitalWaveFormManager = {
             this.DigitalWaveforms[kys[i]].SetUp();
         }
     },
+
     Save: function () {
         objTracker.save(this.DigitalWaveforms);
     },

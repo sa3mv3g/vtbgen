@@ -14,9 +14,9 @@ function GetSignalLevel_string_repr(sig) {
 }
 
 var is_array = function (input) {
-    if (toString.call(input) === "[object Array]")
-        return true;
-    return false;
+	if (toString.call(input) === "[object Array]")
+		return true;
+	return false;
 };
 
 class DigitalWave {
@@ -29,14 +29,20 @@ class DigitalWave {
 	time_marking_interval = 10;
 	doMarkSignalLevels = true;
 	doMarkTime = true;
-
+	//Time scale is basically used fore scalling the time in simulation
+	// i.e. if an instant of simulation time is written to be 18 then 
+	// actual time is 18*TimeScale 
+	TimeScale = 1;
+	marginY = 15;
+	paddingY = 5;
+	multi_select_range = 1;
 	selectRange = [];
 
 	constructor(id, simlen) {
 		this.signal_name = id;
 		this.canvas = document.getElementById(id);
 		this.sim_length = simlen;
-		this.canvas.onselectstart = function(){return false;};
+		this.canvas.onselectstart = function () { return false; };
 		this.canvas.addEventListener('mouseup', (e) => {
 			if (e.ctrlKey) {
 				this.onCanvasCtrlClick(e, this);
@@ -44,33 +50,45 @@ class DigitalWave {
 				this.onCanvasClick(e, this);
 			}
 		});
+		this.canvas.addEventListener('mousemove', e => {
+			this.highlightFutureSelection(e, this);
+		});
+		this.canvas.addEventListener('mouseleave', e => {
+			this.drawOnCanvas();
+		})
 		for (let i = 0; i < simlen; i++) this.waveState[i] = LOW;
 	}
 
-	copyWaveform(arr){
+	copyWaveform(arr) {
 		let d = this.sim_length > arr.length ? arr.length : this.sim_length;
-		for(let i = 0; i < d; i++){
+		for (let i = 0; i < d; i++) {
 			this.waveState[i] = arr[i];
 		}
 	}
-
-	highlightOneSelection(e, clss) {
-		console.log("sss");
+	highlightFutureSelection(e, clss) {
+		clss.drawOnCanvas();
+		clss.highlightOneSelection(e, clss, e.ctrlKey);
+	}
+	highlightOneSelection(e, clss, ctrlKey = false) {
+		//console.log("sss");
 		const rect = clss.canvas.getBoundingClientRect();
 		const x = e.clientX - rect.left;
 		const tin = parseInt(x / clss.time_period_width_in_canvas);
 		var ctx = clss.canvas.getContext('2d');
 		ctx.strokeStyle = '#007fff';
 		ctx.beginPath();
-		ctx.rect(clss.time_period_width_in_canvas * tin, 0, clss.time_period_width_in_canvas, clss.canvas_height);
+		if (ctrlKey)
+			ctx.rect(clss.time_period_width_in_canvas * tin, 0, clss.time_period_width_in_canvas, clss.canvas_height - clss.marginY + clss.paddingY);
+		else
+			ctx.rect(clss.time_period_width_in_canvas * tin, 0, clss.time_period_width_in_canvas * clss.multi_select_range, clss.canvas_height - clss.marginY + clss.paddingY);
 		ctx.closePath();
 		ctx.stroke();
 	}
 
 	drawOnCanvas() {
 		var ctx = this.canvas.getContext('2d');
-		let marginY = 15;
-		let paddingY = 5;
+		let marginY = this.marginY;
+		let paddingY = this.paddingY;
 		ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		for (let i = 1; i <= this.sim_length; i++) {
 			//highlight the selected area
@@ -146,6 +164,7 @@ class DigitalWave {
 			}
 		}
 		clss.drawOnCanvas();
+		clss.highlightOneSelection(event, clss);
 	}
 
 	onCanvasClick(event, clss) {
@@ -156,9 +175,12 @@ class DigitalWave {
 			const x = event.clientX - rect.left;
 			const y = event.clientY - rect.top;
 			const tin = parseInt(x / clss.time_period_width_in_canvas);
-			clss.waveState[tin] = SignalLevelArray[(SignalLevelArray.indexOf(clss.waveState[tin]) + 1) % SignalLevelArray.length];
+			let lev = SignalLevelArray[(SignalLevelArray.indexOf(clss.waveState[tin]) + 1) % SignalLevelArray.length];
+			for (let i = tin; i < tin + clss.multi_select_range && i < clss.waveState.length; i++)
+				clss.waveState[i] = lev;
 		}
 		clss.drawOnCanvas();
+		clss.highlightOneSelection(event, clss);
 	}
 
 	SetUp() {
@@ -173,16 +195,16 @@ class DigitalWave {
 		var res = "";
 		res += "initial begin \n"
 		for (let i = 0; i < this.sim_length; i++) {
-			res += "\t#" + i + " " + this.signal_name + " = " + GetSignalLevel_string_repr(this.waveState[i]) + ";\n";
+			res += "\t#" + this.TimeScale + " " + this.signal_name + " = " + GetSignalLevel_string_repr(this.waveState[i]) + ";\n";
 		}
 		res += "end\n";
 		return res;
 	}
 
 	BuildWaveform(f) {
-		if(typeof(f) !== "function" ) return;
+		if (typeof (f) !== "function") return;
 		a = f(this.sim_length);
-		if(!is_array(a)) return;
+		if (!is_array(a)) return;
 		if (a.length === this.sim_length) this.waveState = a;
 		else {
 			let g = a.length > this.sim_length ? this.sim_length : a.length;
