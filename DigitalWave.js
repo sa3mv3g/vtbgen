@@ -20,17 +20,6 @@ var is_array = function (input) {
 };
 
 
-createHiDPICanvas = function (w, h, ratio) {
-	if (!ratio) { ratio = PIXEL_RATIO; }
-	var can = document.createElement("canvas");
-	can.width = w * ratio;
-	can.height = h * ratio;
-	can.style.width = w + "px";
-	can.style.height = h + "px";
-	can.getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
-	return can;
-}
-
 class DigitalWave {
 	canvas;
 	signal_name;
@@ -165,8 +154,8 @@ class DigitalWave {
 
 	onCanvasCtrlClick(event, clss) {
 		const rect = clss.canvas.getBoundingClientRect();
-		const x = (event.clientX - rect.left) / this.pixel_ratio;
-		const y = (event.clientY - rect.top) / this.pixel_ratio;
+		const x = (event.clientX - rect.left) ;
+		const y = (event.clientY - rect.top) ;
 		const tin = parseInt(x / clss.time_period_width_in_canvas);
 		if (clss.selectRange.length < 2) {
 			clss.selectRange[clss.selectRange.length] = tin;
@@ -187,8 +176,8 @@ class DigitalWave {
 			this.selectRange = [];
 		} else {
 			const rect = clss.canvas.getBoundingClientRect();
-			const x = (event.clientX - rect.left) / this.pixel_ratio;
-			const y = (event.clientY - rect.top) / this.pixel_ratio;
+			const x = (event.clientX - rect.left) ;
+			const y = (event.clientY - rect.top) ;
 			const tin = parseInt(x / clss.time_period_width_in_canvas);
 			let lev = SignalLevelArray[(SignalLevelArray.indexOf(clss.waveState[tin]) + 1) % SignalLevelArray.length];
 			for (let i = tin; i < tin + clss.multi_select_range && i < clss.waveState.length; i++)
@@ -199,14 +188,9 @@ class DigitalWave {
 	}
 
 	SetUp() {
-		var ctx = this.canvas.getContext('2d'),
-			dpr = window.devicePixelRatio || 1,
-			bsr = ctx.webkitBackingStorePixelRatio ||
-				ctx.mozBackingStorePixelRatio ||
-				ctx.msBackingStorePixelRatio ||
-				ctx.oBackingStorePixelRatio ||
-				ctx.backingStorePixelRatio || 1;
-		this.pixel_ratio = dpr / bsr;
+		var width = this.time_period_width_in_canvas * this.sim_length;
+		this.canvas.setAttribute('width', width);
+		this.canvas.setAttribute('height', this.canvas_height + this.marginY + this.paddingY);
 		this.drawOnCanvas();
 	}
 
