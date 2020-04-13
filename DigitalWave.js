@@ -36,6 +36,7 @@ class DigitalWave {
 		this.signal_name = id;
 		this.canvas = document.getElementById(id);
 		this.sim_length = simlen;
+		this.canvas.onselectstart = function(){return false;};
 		this.canvas.addEventListener('mouseup', (e) => {
 			if (e.ctrlKey) {
 				this.onCanvasCtrlClick(e, this);
