@@ -19,6 +19,18 @@ var is_array = function (input) {
 	return false;
 };
 
+
+createHiDPICanvas = function (w, h, ratio) {
+	if (!ratio) { ratio = PIXEL_RATIO; }
+	var can = document.createElement("canvas");
+	can.width = w * ratio;
+	can.height = h * ratio;
+	can.style.width = w + "px";
+	can.style.height = h + "px";
+	can.getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
+	return can;
+}
+
 class DigitalWave {
 	canvas;
 	signal_name;
@@ -86,10 +98,12 @@ class DigitalWave {
 	}
 
 	drawOnCanvas() {
+		// first calculate pixels ratios
 		var ctx = this.canvas.getContext('2d');
 		let marginY = this.marginY;
 		let paddingY = this.paddingY;
 		ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
 		for (let i = 1; i <= this.sim_length; i++) {
 			//highlight the selected area
 			if (this.selectRange.length !== 0) {
@@ -138,11 +152,12 @@ class DigitalWave {
 			//draw markings 
 			ctx.strokeStyle = 'black';
 			ctx.textBaseline = "top";
+			ctx.font = "11px serif";
 			if (this.doMarkTime && i % this.time_marking_interval === 0) {
 				ctx.strokeText('' + parseInt(i - 1), this.time_period_width_in_canvas * (i - 1), this.canvas_height - 5);
 			}
 			if (this.doMarkSignalLevels) {
-				ctx.strokeText(GetSignalLevel_string_repr(this.waveState[i - 1]), this.time_period_width_in_canvas / 2 + this.time_period_width_in_canvas * (i - 1), 5);
+				ctx.strokeText(GetSignalLevel_string_repr(this.waveState[i - 1]), this.time_period_width_in_canvas / 2 + this.time_period_width_in_canvas * (i - 1) - 2, 5);
 			}
 			ctx.textBaseline = "bottom";
 		}
@@ -150,8 +165,8 @@ class DigitalWave {
 
 	onCanvasCtrlClick(event, clss) {
 		const rect = clss.canvas.getBoundingClientRect();
-		const x = event.clientX - rect.left;
-		const y = event.clientY - rect.top;
+		const x = (event.clientX - rect.left) / this.pixel_ratio;
+		const y = (event.clientY - rect.top) / this.pixel_ratio;
 		const tin = parseInt(x / clss.time_period_width_in_canvas);
 		if (clss.selectRange.length < 2) {
 			clss.selectRange[clss.selectRange.length] = tin;
@@ -172,8 +187,8 @@ class DigitalWave {
 			this.selectRange = [];
 		} else {
 			const rect = clss.canvas.getBoundingClientRect();
-			const x = event.clientX - rect.left;
-			const y = event.clientY - rect.top;
+			const x = (event.clientX - rect.left) / this.pixel_ratio;
+			const y = (event.clientY - rect.top) / this.pixel_ratio;
 			const tin = parseInt(x / clss.time_period_width_in_canvas);
 			let lev = SignalLevelArray[(SignalLevelArray.indexOf(clss.waveState[tin]) + 1) % SignalLevelArray.length];
 			for (let i = tin; i < tin + clss.multi_select_range && i < clss.waveState.length; i++)
@@ -184,10 +199,14 @@ class DigitalWave {
 	}
 
 	SetUp() {
-		this.canvas.setAttribute('width', "" + (this.sim_length * this.time_period_width_in_canvas));
-		this.canvas.setAttribute('height', '' + parseInt(this.canvas_height + 10));
-		this.canvas.setAttribute("style", "border: 2px solid black");
-		var ctx = this.canvas.getContext('2d');
+		var ctx = this.canvas.getContext('2d'),
+			dpr = window.devicePixelRatio || 1,
+			bsr = ctx.webkitBackingStorePixelRatio ||
+				ctx.mozBackingStorePixelRatio ||
+				ctx.msBackingStorePixelRatio ||
+				ctx.oBackingStorePixelRatio ||
+				ctx.backingStorePixelRatio || 1;
+		this.pixel_ratio = dpr / bsr;
 		this.drawOnCanvas();
 	}
 
