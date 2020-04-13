@@ -78,7 +78,7 @@ var DigitalWaveFormManager = {
         let str = "initial begin\n";
         k = Object.keys(this.DigitalWaveforms);
         for (let i = 0; i < this.length; i++) {
-            str += "\t#" + i + " ";
+            str += "\t#1 ";
             for (let j = 0; j < k.length; j++) {
                 let dw = this.DigitalWaveforms[k[j]];
                 str += " " + dw.signal_name + " = " + GetSignalLevel_string_repr(dw.waveState[i]) + ";";
@@ -109,6 +109,11 @@ var DigitalWaveFormManager = {
         this.length = newLen;
         for (let i = 0; i < kys.length; i++) {
             this.DigitalWaveforms[kys[i]].sim_length = newLen;
+            let wf = this.DigitalWaveforms[kys[i]].waveState;
+            for(let j =0; j<newLen;j++){
+                this.DigitalWaveforms[kys[i]].waveState[j] = LOW;
+            }
+            this.DigitalWaveforms[kys[i]].copyWaveform(wf);
             this.DigitalWaveforms[kys[i]].SetUp();
         }
     },
