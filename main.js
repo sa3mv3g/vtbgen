@@ -82,7 +82,7 @@ var DigitalWaveFormManager = {
         let str = "initial begin\n";
         k = Object.keys(this.DigitalWaveforms);
         for (let i = 0; i < this.length; i++) {
-            str += "\t#"+this.global_TimeScale+" ";
+            str += "\t#" + this.global_TimeScale + " ";
             for (let j = 0; j < k.length; j++) {
                 let dw = this.DigitalWaveforms[k[j]];
                 str += " " + dw.signal_name + " = " + GetSignalLevel_string_repr(dw.waveState[i]) + ";";
@@ -92,13 +92,13 @@ var DigitalWaveFormManager = {
         str += 'end'
         return str;
     },
-    GenerateCodeForAllWaveforms3:function(){
+    GenerateCodeForAllWaveforms3: function () {
 
     },
     deleteSignal: function (id) {
         delete this.DigitalWaveforms[id];
         let a = document.getElementById(id).parentNode.parentNode;
-        console.log(a);
+        //console.log(a);
         a.parentNode.removeChild(a);
     },
     refreshDocument: function () {
@@ -117,22 +117,21 @@ var DigitalWaveFormManager = {
         for (let i = 0; i < kys.length; i++) {
             this.DigitalWaveforms[kys[i]].sim_length = newLen;
             let wf = this.DigitalWaveforms[kys[i]].waveState;
-            for(let j =0; j<newLen;j++){
+            for (let j = 0; j < newLen; j++) {
                 this.DigitalWaveforms[kys[i]].waveState[j] = LOW;
             }
             this.DigitalWaveforms[kys[i]].copyWaveform(wf);
             this.DigitalWaveforms[kys[i]].SetUp();
         }
     },
-
     Save: function () {
         objTracker.save(this.DigitalWaveforms);
     },
-    undo: function(){
+    undo: function () {
         this.DigitalWaveforms = objTracker.undo();
         this.refreshDocument();
     },
-    redo: function(){
+    redo: function () {
         this.DigitalWaveforms = objTracker.redo();
         this.refreshDocument();
     }
@@ -297,18 +296,47 @@ function generateCode() {
     win.document.body.innerText = (s);
 }
 
+function changeMultiselectrange() {
+    var cans = getSelectedCanvas();
+    for (let i = 0; i < cans.length; i++) {
+        let a = parseInt(prompt("Enter new range", DigitalWaveFormManager.DigitalWaveforms[cans[i].id].multi_select_range));
+        if(a == 0 || a > DigitalWaveFormManager.length) continue;
+        DigitalWaveFormManager.DigitalWaveforms[cans[i].id].multi_select_range = a;
+    }   
+}
+
 function refresh() {
     DigitalWaveFormManager.refreshDocument();
 }
 
-function Save(){
-    DigitalWaveFormManager.save();
+function Save() {
+    DigitalWaveFormManager.Save();
 }
 
-function Redo(){
+function Redo() {
     DigitalWaveFormManager.redo();
 }
 
-function Undo(){
+function Undo() {
     DigitalWaveFormManager.undo();
+}
+
+function keyboardShortcut(e) {
+    if (e.ctrlKey) {
+        switch (e.which) {
+            //b
+            case 66: generateCode(); break;
+            //y
+            case 89: Redo(); break;
+            //z
+            case 90: Undo(); break;
+        }
+    }
+    //console.log(e.which);
+    //r = 82
+    //s * 83
+    //z = 90
+    //y = 89
+    //a = 65
+    //b = 66
 }

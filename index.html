@@ -5,6 +5,7 @@
         window.onload = () => {
             sessionStorage.clear();
             document.getElementById("optionsMenuContiner").style.width = parseInt(screen.width - 2) + 'px';
+            document.addEventListener('keyup', e => { keyboardShortcut(e) });
             run();
         };
         function run() {
@@ -128,9 +129,10 @@
             <button class="dropbtn"> Options </button>
             <div class="dropdown-content">
                 <button class="optionsMenu" onclick="ChangeSimulationTime()">Change Simulation Time</button>
-                <button class="optionsMenu" onclick="ToogleTimeMarkings()">Turn On/Off time markings</button>
+                <!-- <button class="optionsMenu" onclick="ToogleTimeMarkings()">Turn On/Off time markings</button>
                 <button class="optionsMenu" onclick="ToggleSignalLevelMarkings()">Turn On/Off signal level
-                    markings</button>
+                    markings</button> -->
+                <button class="optionsMenu" onclick="changeMultiselectrange()">Change Multiselecte Range</button>
                 <button class="optionsMenu" onclick="changeMarkingIntervals()">Change Marking Interval</button>
                 <button class="optionsMenu" onclick="generateCode()">Generate Verilog Code</button>
             </div>
