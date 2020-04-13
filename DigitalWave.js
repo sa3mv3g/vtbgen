@@ -87,7 +87,6 @@ class DigitalWave {
 	}
 
 	drawOnCanvas() {
-		// first calculate pixels ratios
 		var ctx = this.canvas.getContext('2d');
 		let marginY = this.marginY;
 		let paddingY = this.paddingY;

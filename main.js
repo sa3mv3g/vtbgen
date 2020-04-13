@@ -117,14 +117,6 @@ var DigitalWaveFormManager = {
             waveforms[kys[i]].drawOnCanvas();
         }
     },
-    changeRatio:function(r){
-        let kys = Object.keys(this.DigitalWaveforms);
-        let waveforms = this.DigitalWaveforms;
-        for(let i=0;i<kys.length;i++){
-            waveforms[kys[i]].pixel_ratio = r;
-            waveforms[kys[i]].drawOnCanvas();
-        }
-    },
     changeSimulationTime: function (newLen) {
         let kys = Object.keys(this.DigitalWaveforms);
         this.length = newLen;
@@ -346,11 +338,4 @@ function keyboardShortcut(e) {
             case 90: Undo(); break;
         }
     }
-    //console.log(e.which);
-    //r = 82
-    //s * 83
-    //z = 90
-    //y = 89
-    //a = 65
-    //b = 66
 }
