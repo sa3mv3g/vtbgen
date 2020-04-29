@@ -92,7 +92,7 @@ var DigitalWaveFormManager = {
         return str;
     },
     GenerateCodeForAllWaveforms3: function () {
-
+        
     },
     deleteSignal: function (id) {
         delete this.DigitalWaveforms[id];
