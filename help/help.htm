@@ -5,17 +5,68 @@
     <p>Contents <br/>
         <ol>
             <li><a href="#intro">Introduction</a></li>
+            <li><a href="#getStarted">Getting Started</a></li>
         </ol>
     </p>
     <section id="intro">
         <h1>Introduction</h1>
         <p>
-            vtbgen is a utility application made using basic Front-end web technologies. "vtbgen" is abbreviation for Verilog Testbench geenrator.
-            <br/>The motivation behind this app is that to test a design, written in Verilog, you have to define your digital signals which will be inputs. 
+            <b>vtbgen</b> is a utility application made using basic Front-end web technologies. "vtbgen" is abbreviation for Verilog Testbench geenrator.
+            <br/>The <b>motivation</b> behind this app is that to test a design, written in Verilog, you have to define your digital signals which will be inputs. 
             <br/>Now, you know your inputs, you know when your input signal will be LOW, HIGH, X or Z! So instead of writing this information by hand 
-            using some text based language, why not using some graphical means to do the same? 
+            using some text based language, why not use some graphical means to do the same? 
             <br/>This is exactly what this application tries to acheve. 
             <br /> This application provides you a graphical interface which lets you to draw as many signal as required and then with one click, it generates verilog code which can be placed in <b>initial</b> block of test bench.   
+        </p>
+        <img src="a.png" alt="Verilog Testbench generator image" style="width:100%;border:2px solid black;" />
+        <p style="text-align: center; font-style: italic;">Fig1. Start page</p>
+    </section>
+    <section id="getStarted">
+        <h1>Getting Started</h1>
+        <p>
+            This Section Describes how to get started with this application.
+            <br/> when you open this application, first you will see <i>Fig1</i>.
+            <br/> Lets add a new signal with a name <b>clock</b>. TO do this by following the steps under:
+            <ul>
+                <li>Goto <b>File</b></li>
+                <li>Select <b>New Signal</b> from the drop down menu</li>
+                <li>A pop-up will be displayed where the name of signal (it should be unique) will be entered.</li>
+            </ul> 
+            Fig2. show the result.
+            <img src="fig2.png"style="width:100%; border:2px solid black;"/>
+            <p style="text-align: center; font-style: italic;">Fig2. Clock Signal added</p>
+            <br/> Now, I want to change the simulation time. There will be obvious reasons for you to do that!
+            <br/> <i>Fig3.</i> shows how to change simulation time. <br/>
+            <img src="fig3.png" style="display: block;margin: auto;"/>
+            <p style="text-align: center; font-style: italic;">Fig3. Drop Down menu where there is an option to change Simulation time</p>
+            <p>To Change simulation time
+                <ul>
+                    <li>Goto <b>Options</b> menu</li>
+                    <li>Select <b>Change Simulation Time</b> </li>
+                    <li>A pop up be displayed, where you will enter the required time</li>
+                </ul>
+                By Default, it is 100
+            </p>
+            <p>
+                <i>*Note that, the units of the time can not be selected from here, you will have to use <b>`timescale</b> compiler directive in the final verilog testbench to set the units. </i>
+            </p>
+            <p>
+                Fig4 shows the same signal as shown in Fig2 but with smaller simultion time (of 20).
+            </p>
+            <img src="fig4.png" style="display: block;margin: auto;"/>
+            <p style="text-align: center; font-style: italic;">Fig4. Simlation time of 20</p>
+            <p>
+                You can see that, changing the simulation time, changed the simulation time for all the signals 
+            </p>
+            <hr/>
+            <p>
+                As the name of "clock" signal suggest, it is a clock signal, so we need to change this to a clock signal.
+                You can do that by 
+                <ul>
+                    <li>Clicking on the square box on the right side of text "Clock". This selects this signal</li>
+
+                </ul>
+            </p>
         </p>
     </section>
 </body>
