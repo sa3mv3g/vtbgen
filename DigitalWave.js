@@ -6,10 +6,10 @@ const SignalLevelArray = [LOW, X, HiZ, HIGH];
 
 function GetSignalLevel_string_repr(sig) {
 	switch (sig) {
-		case LOW: return '0';
-		case HIGH: return '1';
-		case X: return 'x';
-		case HiZ: return 'z';
+		case LOW: return "1'b0";
+		case HIGH: return "1'b1";
+		case X: return "1'bx";
+		case HiZ: return "1'bz";
 	}
 }
 
