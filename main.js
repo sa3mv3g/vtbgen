@@ -84,7 +84,14 @@ var DigitalWaveFormManager = {
             str += "\t#" + this.global_TimeScale + " ";
             for (let j = 0; j < k.length; j++) {
                 let dw = this.DigitalWaveforms[k[j]];
-                str += " " + dw.signal_name + " = " + GetSignalLevel_string_repr(dw.waveState[i]) + ";";
+                let aa = "";
+                switch(dw.waveState[i]){
+                    case LOW: aa = "1'b0"; break;
+                    case HIGH : aa = "1'b1";break;
+                    case X: aa = "1'bx"; break;
+                    case HiZ: aa = "1'bz"; break;
+                }
+                str += " " + dw.signal_name + " = " + aa + ";";
             }
             str += "\n";
         }
